@@ -1,0 +1,23 @@
+{
+	"parse": {},
+	"compress": {
+		"dead_code": true,
+		"drop_console": true
+	},
+	"mangle": {
+		"properties": false
+	},
+	"output": {
+		"beautify": true
+	},
+	"sourceMap": {},
+	"ecma": 8,
+	"keep_classnames": false,
+	"keep_fnames": false,
+	"ie8": false,
+	"module": false,
+	"nameCache": null,
+	"safari10": false,
+	"toplevel": false,
+	"warnings": false
+}

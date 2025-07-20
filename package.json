@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@types/terser": "^3.8.1",
+    "compression-webpack-plugin": "^11.1.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack-bundle-analyzer": "^4.10.2"
+  }
+}

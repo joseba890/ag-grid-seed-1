@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"npm-intellisense.packageSubfoldersIntellisense": true,
+		"typescript.tsdk": "node_modules\\typescript\\lib"
+	}
+}

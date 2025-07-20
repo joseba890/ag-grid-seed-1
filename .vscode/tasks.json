@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "chokidar",
+			"path": "enterprise/packages/webpack5-javascript",
+			"problemMatcher": [],
+			"label": "npm: chokidar - enterprise/packages/webpack5-javascript",
+			"detail": "chokidar \"**/*config.?js\" -c \"npm run build.production\""
+		}
+	]
+}

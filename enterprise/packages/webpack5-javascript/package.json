@@ -1,29 +1,41 @@
 {
-  "name": "ag-grid-packages-webpack5-javascript",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "clean": "rimraf dist",
-    "start": "webpack-dev-server --progress --port 8080 --mode development",
-    "build": "npm run clean && webpack --mode production"
-  },
-  "devDependencies": {
-    "css-loader": "^6.8.1",
-    "html-webpack-plugin": "^5.5.1",
-    "sass": "^1.62.1",
-    "sass-loader": "^13.3.1",
-    "style-loader": "^3.3.3",
-    "webpack": "^5.85.0",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0",
-    "rimraf": "5.0.1"
-  },
-  "dependencies": {
-    "ag-grid-community": "latest",
-    "ag-grid-enterprise": "latest"
-  },
-  "author": "Sean Landsman <sean@thelandsmans.com>",
-  "license": "MIT",
-  "homepage": "https://www.ag-grid.com/"
+    "name": "ag-grid-packages-webpack5-javascript",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "sideEffects": false,
+    "main": "/dist/leaflet-2-jps.js",
+    "scripts": {
+        "clean": "rimraf dist",
+        "chokidar": "chokidar \"**/*webpack.config.js\" -c \"npm run build.production\"",
+        "start": "webpack-dev-server --progress --port 8080 --mode development",
+        "build": "npm run clean && webpack --watch",
+        "build.production": "npm run clean && webpack --config webpack.config.js --mode production --watch",
+        "build.development": "npm run clean && webpack --mode development --watch"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.0",
+        "@babel/preset-env": "^7.28.0",
+        "babel-loader": "^10.0.0",
+        "clean-terminal-webpack-plugin": "^3.0.0",
+        "css-loader": "^7.1.2",
+        "html-webpack-plugin": "^5.6.3",
+        "leaflet": "^2.0.0-alpha",
+        "leaflet-groupedlayercontrol": "^0.6.1",
+        "mini-css-extract-plugin": "^2.9.2",
+        "postcss": "^8.5.6",
+        "postcss-loader": "^8.1.1",
+        "rimraf": "6.0.1",
+        "sass": "^1.89.2",
+        "sass-loader": "^16.0.5",
+        "style-loader": "^4.0.0",
+        "terser-webpack-plugin": "^5.3.14",
+        "webpack": "^5.100.2",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "^5.2.2",
+        "workbox-webpack-plugin": "^7.3.0"
+    },
+    "author": "Sean Landsman <sean@thelandsmans.com>",
+    "license": "MIT",
+    "homepage": "https://www.ag-grid.com/"
 }

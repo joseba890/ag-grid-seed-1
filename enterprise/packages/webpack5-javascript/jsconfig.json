@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"module": "es6",
+		"target": "es6"
+	},
+	"exclude": ["C:\\Users\\Joe\\AppData\\Local\\Microsoft\\TypeScript\\5.8\\node_modules\\@types\\leaflet"],
+	"typeAcquisition": {
+		"include": ["jquery", "leaflet@2.0.0-alpha", "lodash", "webpack"],
+		"enable": true
+	}
+}
