@@ -1,11 +1,25 @@
 {
-	"compilerOptions": {
-		"module": "es6",
-		"target": "es6"
-	},
-	"exclude": ["C:\\Users\\Joe\\AppData\\Local\\Microsoft\\TypeScript\\5.8\\node_modules\\@types\\leaflet"],
-	"typeAcquisition": {
-		"include": ["jquery", "leaflet@2.0.0-alpha", "lodash", "webpack"],
-		"enable": true
-	}
+    "compilerOptions": {
+        "baseUrl": ".",
+        "module": "es6",
+        "target": "es6",
+        "noLib": true,
+        "lib": ["ES6", "DOM"],
+        "charset": "fux"
+    },
+    "include": [],
+    "references": [],
+    "extends": [],
+    // "lib": [
+    //     "es6", // Includes standard ESNext features
+    //     "dom" // Includes DOM API types
+    // ],
+    "exclude": [
+        "C:\\Users\\Joe\\AppData\\Local\\Microsoft\\TypeScript\\5.8\\node_modules\\@types\\leaflet",
+        "dist"
+    ]
+    // "typeAcquisition": {
+    //     "include": ["jquery", "leaflet@2.0.0-alpha", "lodash", "webpack"],
+    //     "enable": true
+    // }
 }

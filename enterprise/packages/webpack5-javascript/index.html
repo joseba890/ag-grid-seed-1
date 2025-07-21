@@ -5,6 +5,459 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+
+    <style>
+        :root {
+            --sans-font: -apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Nimbus Sans L", Roboto, "Noto Sans", "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+            --standard-border-radius: 5px;
+            --bg: #fff;
+            --accent-bg: #f5f7ff;
+            --text: #212121;
+            --text-light: #585858;
+            --border: #898ea4;
+            --accent: #0d47a1;
+            --accent-hover: #9E9E9E;
+            --accent-text: var(--bg);
+            --marked: #fd3;
+            --disabled: #efefef
+        }
+
+        @media (prefers-color-scheme:dark) {
+            :root {
+                color-scheme: dark;
+                --bg: #212121;
+                --accent-bg: #2b2b2b;
+                --text: #dcdcdc;
+                --text-light: #ababab;
+                --accent: #ffb300;
+                --accent-hover: #9E9E9E;
+                --accent-text: var(--bg);
+                --disabled: #111
+            }
+
+            img {
+                opacity: .8
+            }
+        }
+
+        *,
+        :after,
+        :before {
+            box-sizing: border-box
+        }
+
+        input,
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none
+        }
+
+        html {
+            font-family: var(--sans-font), sans-serif;
+            scroll-behavior: smooth
+        }
+
+        body {
+            color: var(--text);
+            background-color: var(--bg);
+            grid-template-columns: 1fr min(48rem, 90%) 1fr;
+            margin: 0;
+            font-size: 1.15rem;
+            line-height: 1.5;
+            display: grid;
+            text-align: center
+        }
+
+        body>* {
+            grid-column: 2
+        }
+
+        main {
+            padding-top: 1.5rem
+        }
+
+        h1 {
+            font-size: 3rem
+        }
+
+        h2,
+        h3 {
+            margin-top: 3rem;
+            font-size: 2.6rem
+        }
+
+        h3 {
+            font-size: 2rem
+        }
+
+        h4 {
+            font-size: 1.44rem
+        }
+
+        p {
+            margin: 1.5rem 0
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            overflow-wrap: break-word
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.1
+        }
+
+        @media only screen and (max-width:720px) {
+            h1 {
+                font-size: 2.5rem
+            }
+
+            h2 {
+                font-size: 2.1rem
+            }
+
+            h3 {
+                font-size: 1.75rem
+            }
+
+            h4 {
+                font-size: 1.25rem
+            }
+        }
+
+        a,
+        a:visited {
+            color: var(--accent)
+        }
+
+        a:hover {
+            text-decoration: none
+        }
+
+        .button,
+        a.button,
+        button,
+        input[type=button] {
+            border: 1px solid var(--accent);
+            background-color: var(--accent);
+            color: var(--accent-text);
+            line-height: normal;
+            text-decoration: none
+        }
+
+        a.button,
+        input[type=button] {
+            padding: .5rem .9rem
+        }
+
+        .button[aria-disabled=true],
+        button[disabled],
+        input:disabled,
+        select:disabled {
+            cursor: not-allowed;
+            background-color: var(--disabled);
+            border-color: var(--disabled);
+            color: var(--text-light)
+        }
+
+        .button:not([aria-disabled=true]):hover,
+        button:enabled:hover,
+        input[type=button]:enabled:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            cursor: pointer
+        }
+
+        .button:focus-visible,
+        button:focus-visible:where(:enabled),
+        input:enabled:focus-visible:where([type=button]) {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px
+        }
+
+        table,
+        td,
+        th {
+            text-align: center
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed
+        }
+
+        figure>table {
+            width: max-content;
+            margin: 0
+        }
+
+        td,
+        th {
+            border: 1px solid var(--border);
+            padding: .5rem
+        }
+
+        th {
+            background-color: var(--accent-bg);
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        tr:nth-child(2n) {
+            background-color: var(--accent-bg)
+        }
+
+        .button,
+        button,
+        input,
+        select {
+            font-size: inherit;
+            border-radius: var(--standard-border-radius);
+            box-shadow: none;
+            max-width: 100%;
+            margin-bottom: .5rem;
+            padding: .5rem;
+            font-family: inherit;
+            display: inline-block
+        }
+
+        input,
+        select {
+            color: var(--text);
+            background-color: var(--bg);
+            border: 1px solid var(--border)
+        }
+
+        label {
+            display: block
+        }
+
+        select:not([multiple]) {
+            background-image: linear-gradient(45deg, transparent 49%, var(--text) 51%), linear-gradient(135deg, var(--text) 51%, transparent 49%);
+            background-position: calc(100% - 15px), calc(100% - 10px);
+            background-repeat: no-repeat;
+            background-size: 5px 5px, 5px 5px;
+            padding-inline-end: 25px
+        }
+
+        .notice,
+        mark {
+            border-radius: var(--standard-border-radius)
+        }
+
+        mark {
+            background-color: var(--marked);
+            color: #000;
+            padding: 2px 5px;
+            font-weight: 700
+        }
+
+        mark a {
+            color: #0d47a1
+        }
+
+        figure {
+            margin: 0;
+            display: block;
+            overflow-x: auto
+        }
+
+        .notice {
+            background: var(--accent-bg);
+            border: 2px solid var(--border);
+            margin: 2rem 0;
+            padding: 1rem
+        }
+
+        @media only screen and (min-width:680px) {
+            #moreColumns {
+                display: none
+            }
+        }
+
+        .responsive_1 {
+            width: 320px;
+            height: 300px;
+            margin: auto
+        }
+
+        @media only screen and (min-width:500px) {
+            .responsive_1 {
+                width: 468px;
+                height: 350px
+            }
+        }
+
+        @media only screen and (min-width:800px) {
+            .responsive_1 {
+                width: 728px;
+                height: 400px
+            }
+        }
+
+        div.container_336 {
+            margin: 35px auto;
+            width: 336px;
+            display: none;
+            height: 280px
+        }
+
+        @media (max-width:728px) {
+            div.container_336 {
+                display: block;
+                margin: 35px auto
+            }
+        }
+
+        div.container_728 {
+            margin: 35px auto;
+            width: 728px;
+            display: none;
+            height: 90px
+        }
+
+        @media (min-width:728px) {
+            div.container_728 {
+                display: block;
+                margin: 35px auto
+            }
+        }
+
+        #themeSwitcher {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            z-index: 1100
+        }
+
+        #themeSwitch {
+            cursor: pointer
+        }
+
+        #timestamp {
+            display: none
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .bold {
+            font-weight: 700
+        }
+
+        nav a {
+            padding: .5rem;
+            display: inline-block
+        }
+
+        #map1 {
+            height: 600px;
+            border: var(--border) solid 4px
+        }
+
+        #prevNext button {
+            margin: .5rem
+        }
+
+        #footer {
+            content-visibility: auto
+        }
+
+        body.dark,
+        body.light {
+            --accent-hover: #9E9E9E;
+            --accent-text: var(--bg)
+        }
+
+        body.light {
+            --bg: #fff;
+            --accent-bg: #f5f7ff;
+            --text: #212121;
+            --text-light: #585858;
+            --border: #898EA4;
+            --accent: #0d47a1;
+            --marked: #ffdd33;
+            --disabled: #efefef
+        }
+
+        body.dark {
+            color-scheme: dark;
+            --bg: #212121;
+            --accent-bg: #2b2b2b;
+            --text: #dcdcdc;
+            --text-light: #ababab;
+            --accent: #ffb300;
+            --disabled: #111
+        }
+
+        .ag-grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100%
+        }
+
+        .ag-grid-header {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 13px;
+            margin-bottom: 5px
+        }
+
+        #agGrid,
+        #agGrid2 {
+            height: 500px
+        }
+
+        .ag-paging-panel {
+            height: auto;
+            flex-wrap: wrap-reverse;
+            row-gap: 1rem;
+            padding: .25rem;
+            align-items: center;
+            justify-content: flex-end
+        }
+
+        @media (max-width:768px) {
+            .ag-paging-panel {
+                justify-content: center
+            }
+        }
+
+
+        /* START custom Leaflet styles */
+
+        .info {
+            padding: 6px 8px;
+            background: var(--bg);
+            box-shadow: 0 0 10px #0003;
+            border-radius: 5px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .legend {
+            text-align: left;
+            line-height: 22px;
+        }
+
+        .legend i {
+            width: 16px;
+            height: 16px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.9;
+        }
+
+        /* END custom Leaflet styles */
+    </style>
+
+
     <style>
         #map1,
         #map2 {
@@ -19,9 +472,9 @@
 
 <body>
 
-    <div id="map1"></div>
+    <div id="map1_"></div>
 
-    <div id="map2"></div>
+    <div id="map1" aria-keyshortcuts="Alt+Shift+A"></div>
 
 </body>
 

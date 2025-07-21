@@ -1,39 +1,36 @@
-// const jsonInfo = {
-// 	data: municipalitiesCT,
-// 	filename: 'CT-Tax-Rates-2025.json', // Manually store the filename
-// };
+// import L from "leaflet";
+// import { Map } from "../node_modules/leaflet/src/map";
+// import { Browser } from "../node_modules/leaflet/src/core";
+// import { GeoJSON } from "../node_modules/leaflet/src/layer";
+// import { TileLayer } from "../node_modules/leaflet/src/layer/tile";
+// import { LatLng } from "../node_modules/leaflet/src/geo";
+// import { DomUtil, DomEvent } from "../node_modules/leaflet/src/dom";
+// import { Control } from "../node_modules/leaflet/src/control";
 
-// console.log(jsonInfo);
+// import * as groupedLayers from "leaflet-groupedlayercontrol";
 
-// import(/* webpackChunkName: "my-json-data" */ './CT-Tax-Rates-2025.json')
-// 	.then(({ default: jsonData }) => {
-// 		console.log(jsonData);
-// 	})
-// 	.catch((error) => {
-// 		console.error('Error loading JSON:', error);
-// 	});
-
-// import L from 'leaflet';
-import { Map } from "../node_modules/leaflet/src/map/index.js";
-import { Browser } from "../node_modules/leaflet/src/core/index.js";
+// @ts-ignore
 import {
+    Browser,
+    Control,
+    DomEvent,
+    DomUtil,
     GeoJSON,
-    DivOverlay,
-} from "../node_modules/leaflet/src/layer/index.js";
-import { TileLayer } from "../node_modules/leaflet/src/layer/tile/index.js";
-import { LatLng, LatLngBounds } from "../node_modules/leaflet/src/geo/index.js";
-import { DomUtil } from "../node_modules/leaflet/src/dom/index.js";
-import { Control, Zoom } from "../node_modules/leaflet/src/control/index.js";
-
-// import * as groupedLayers from 'leaflet-groupedlayercontrol';
+    LatLng,
+    // LatLngBounds,
+    Map,
+    TileLayer,
+    // VideoOverlay,
+    // Draggable,
+} from "../node_modules/leaflet/src/Leaflet.js";
 
 import "leaflet/src/leaflet.css";
-import "leaflet-groupedlayercontrol/src/leaflet.groupedlayercontrol.css";
+// import "leaflet-groupedlayercontrol/src/leaflet.groupedlayercontrol.css";
 
 import municipalitiesCT from "../src/CT-Tax-Rates-2025.json";
 
 let jpsModule = (function () {
-    debugger;
+    // debugger;
     const municipalities = municipalitiesCT;
 
     let postData = function (e) {
@@ -54,19 +51,19 @@ let jpsModule = (function () {
         fetch("/Scripts/php/Error-Logger.php", { method: "POST", body: d });
     };
 
-    window.addEventListener("error", (e) => {
-        // postData(e);
-    });
+    // window.addEventListener("error", (e) => {
+    // postData(e);
+    // });
 
-    window.onerror = function (msg, url, line, col, err) {
-        let e = {};
-        e.message = msg;
-        e.filename = url;
-        e.colno = col;
-        e.lineno = line;
-        e.stack = err + "";
-        // postData(e);
-    };
+    // window.onerror = function (msg, url, line, col, err) {
+    //     let e = {};
+    //     e.message = msg;
+    //     e.filename = url;
+    //     e.colno = col;
+    //     e.lineno = line;
+    //     e.stack = err + "";
+    //     // postData(e);
+    // };
 
     function yieldMain() {
         return new Promise((res) => {
@@ -95,7 +92,7 @@ let jpsModule = (function () {
         onEachFeature,
     });
 
-    const map = new Map("map2", {
+    const map = new Map("map1", {
         zoomControl: false,
         minZoom: 7,
         maxZoom: 14,
@@ -120,13 +117,15 @@ let jpsModule = (function () {
         // position: 'topright', // 'topright' is default
     };
 
-    /*
-	const groupedLayerControl = new Control.groupedLayers(null, groupedOverlays, options);
-	map.addControl(groupedLayerControl);
+    // const groupedLayerControl = new Control.groupedLayers(
+    //     null,
+    //     groupedOverlays,
+    //     options
+    // );
+    // map.addControl(groupedLayerControl);
 
-	new DomEvent.disableClickPropagation(groupedLayerControl._overlaysList);
-	new DomEvent.disableScrollPropagation(groupedLayerControl._overlaysList);
-    */
+    // new DomEvent.disableClickPropagation(groupedLayerControl._overlaysList);
+    // new DomEvent.disableScrollPropagation(groupedLayerControl._overlaysList);
 
     const browser = Browser;
 
@@ -143,7 +142,7 @@ let jpsModule = (function () {
 
     function addInfoDiv() {
         info.onAdd = function () {
-            this._div = new DDomUtil.create("div", "info");
+            this._div = new DomUtil.create("div", "info");
             new DomEvent.disableClickPropagation(this._div);
             new DomEvent.disableScrollPropagation(this._div);
             this.update();
@@ -186,8 +185,8 @@ let jpsModule = (function () {
 
     function onEachFeature(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight,
+            pointerover: highlightFeature,
+            pointerout: resetHighlight,
             click: zoomToFeature,
         });
     }
@@ -196,10 +195,10 @@ let jpsModule = (function () {
         const layer = e.target;
 
         layer.setStyle({
-            weight: 5,
+            weight: 4,
             color: "#000",
             dashArray: "",
-            fillOpacity: 0.7,
+            fillOpacity: 0.9,
         });
 
         layer.bringToFront(); // fixes inconsistent border color
@@ -210,16 +209,12 @@ let jpsModule = (function () {
     function resetHighlight(e) {
         const ep = e.sourceTarget._eventParents;
         ep[Object.keys(ep)[0]].resetStyle(e.target);
+        info.update();
     }
-
-    // function resetHighlight(e) {
-    // 	geojson.resetStyle(e.target);
-    // 	info.update();
-    // }
 
     function zoomToFeature(e) {
         map.fitBounds(e.target.getBounds(), {
-            duration: 0.75,
+            duration: 0.15,
             maxZoom: 10,
             padding: [100, 100],
         });
@@ -231,7 +226,7 @@ let jpsModule = (function () {
         if (!window.agGrid || !agGrid.createGrid) {
             return;
         }
-        debugger;
+        // debugger;
         const agGridDiv = document.getElementById("agGrid");
 
         if (!agGridDiv) {
@@ -308,7 +303,7 @@ let jpsModule = (function () {
             "Tax rate data provided by the CT Office of Policy and Management"
         );
 
-        mapRightClick(map);
+        // mapRightClick(map);
     }
 
     function fitBounds() {
@@ -320,6 +315,7 @@ let jpsModule = (function () {
                 [42.0505, -71.7869],
             ],
             {
+                duration: 5,
                 maxZoom: 14,
             }
         );
@@ -358,7 +354,7 @@ let jpsModule = (function () {
     }
 
     function addZoomControl() {
-        new Control.zoom({
+        new Control.Zoom({
             position: "topright",
         }).addTo(map);
     }
@@ -394,13 +390,16 @@ let jpsModule = (function () {
 
     async function myMain() {
         const tasks = [
+            // createAgGrid
             createMap,
+            addTileLayers,
             fitBounds,
-            addInfoDiv,
+
             addLegend,
             addZoomControl,
-            addTileLayers,
-        ]; // createAgGrid
+
+            addInfoDiv,
+        ];
 
         console.time("task loop");
 
@@ -411,6 +410,7 @@ let jpsModule = (function () {
             try {
                 task.call();
             } catch (error) {
+                throw error;
                 // postData(error);
             }
 

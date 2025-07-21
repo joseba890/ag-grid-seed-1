@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "private": true,
-    "sideEffects": false,
-    "main": "/dist/leaflet-2-jps.js",
+    "sideEffects": ["*.cssXXX"],
+
     "scripts": {
         "clean": "rimraf dist",
         "chokidar": "chokidar \"**/*webpack.config.js\" -c \"npm run build.production\"",

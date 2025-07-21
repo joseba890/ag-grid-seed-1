@@ -11,6 +11,11 @@ const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const BundleAnalyzerPlugin =
+    require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
@@ -28,9 +33,9 @@ const environment = process.env.NODE_ENV || "development";
 const config = {
     // entry: ['./src/leaflet-2.js', './src/CT-Tax-Rates-2025.js'],
     entry: {
-        "NH-Tax-Rates-": "./src/leaflet-2.js",
+        // "Leaflet-2.0.0": "./src/leaflet-2.0.0.js",
+        // "NH-Tax-Rates-": "./src/NH-Tax-Rates.js",
         "CT-Tax-Rates-2025": "./src/CT-Tax-Rates-2025.js",
-        // FUX: "./src/CT-Tax-Rates-2025.json",
     },
     output: {
         filename: "[name].bundle.js",
@@ -50,14 +55,14 @@ const config = {
     resolve: {
         extensions: [".ts", ".json", "..."],
     },
-
+    devtool: "source-map",
     optimization: {
         // usedExports: true,
 
         concatenateModules: true,
         emitOnErrors: false,
         innerGraph: true,
-        mangleExports: false,
+        // mangleExports: false,
         minimize: true,
         minimizer: [
             // new EsbuildPlugin({
@@ -73,11 +78,13 @@ const config = {
                         unused: true,
                         dead_code: true,
                         ecma: 2020,
+                        drop_debugger: true, // preserves debugger statements
+                        drop_console: true,
                     },
                     format: {
                         comments: false, // 'some', // false, // include comments in output
                         // compress: true,
-                        beautify: true,
+                        beautify: false,
                     },
                     keep_classnames: true,
                     keep_fnames: true,
@@ -155,28 +162,36 @@ const config = {
         new HtmlWebpackPlugin({
             template: "index.html",
         }),
-        // new CompressionPlugin({
-        // 	algorithm: 'brotliCompress',
-        // 	compressionOptions: {
-        // 		params: {
-        // 			[constants.BROTLI_PARAM_QUALITY]: 9, // 11
-        // 		},
-        // 	},
-        // 	test: /\.(js|css)$/i,
-        // 	exclude: /node_modules/,
-        // 	minRatio: 0.8,
-        // }),
+        new CompressionPlugin({
+            algorithm: "brotliCompress",
+            compressionOptions: {
+                params: {
+                    // "constants.BROTLI_PARAM_QUALITY": 9,
+                    // [constants.BROTLI_PARAM_QUALITY]: 9, // 11
+                },
+            },
+            test: /\.(js|css)$/i,
+            exclude: /node_modules/,
+            minRatio: 0.8,
+        }),
         new CleanTerminalPlugin({
             // message: 'FUX',
+        }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: "static", // server
+            logLevel: "info", // "error",
+            openAnalyzer: false,
+            generateStatsFile: true,
+            compressionAlgorithm: "brotli",
         }),
     ],
 
     module: {
         rules: [
-            {
-                test: /\.(js|jsx)$/i,
-                loader: "babel-loader",
-            },
+            // {
+            //     test: /\.(js|jsx)$/i,
+            //     loader: "babel-loader",
+            // },
             // {
             // 	test: /\.s[ac]ss$/i,
             // 	use: [stylesHandler, 'css-loader', 'postcss-loader', 'sass-loader'],
@@ -252,7 +267,7 @@ module.exports = () => {
 
         config.plugins.push(new MiniCssExtractPlugin());
 
-        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
+        // config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
     } else {
         config.mode = "development";
     }
