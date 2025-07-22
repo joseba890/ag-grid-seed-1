@@ -14,13 +14,17 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-// import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
+
 const path = require("path");
+const glob = require("glob");
 const constants = require("node:zlib");
+const { library } = require("webpack");
 
 const isProduction = true; // process.env.NODE_ENV === 'production';
 
@@ -45,10 +49,13 @@ const config = {
         iife: true,
         clean: true,
         compareBeforeEmit: false,
+        // library: {
+        //     type: "Leaflet",
+        // },
     },
     name: "leaflet-2.0.0-alpha",
 
-    mode: "production",
+    // mode: "production",
 
     // publicPath: "",
 
@@ -57,7 +64,7 @@ const config = {
     },
     devtool: "source-map",
     optimization: {
-        // usedExports: true,
+        usedExports: true,
 
         concatenateModules: true,
         emitOnErrors: false,
@@ -65,9 +72,11 @@ const config = {
         // mangleExports: false,
         minimize: true,
         minimizer: [
+            "...",
             // new EsbuildPlugin({
             // 	target: 'es2015', // Syntax to transpile to (see options below for possible values)
             // }),
+
             new TerserPlugin({
                 extractComments: true,
                 parallel: 8, // cpus().length - 1,
@@ -80,6 +89,8 @@ const config = {
                         ecma: 2020,
                         drop_debugger: true, // preserves debugger statements
                         drop_console: true,
+                        keep_fnames: true,
+                        keep_classnames: true,
                     },
                     format: {
                         comments: false, // 'some', // false, // include comments in output
@@ -93,23 +104,24 @@ const config = {
 
                 test: /\.m?js$/i,
             }),
-            // new CssMinimizerPlugin({
-            // 	test: /\.css$/i,
-            // parallel: 4,
-            // minimizerOptions: {
-            // 	preset: [
-            // 		{
-            // 			discardComments: { removeAll: true },
-            // 		},
-            // 	],
-            // },
-            // }),
+
+            new CssMinimizerPlugin({
+                test: /\.css$/i,
+                // parallel: 4,
+                // minimizerOptions: {
+                // 	preset: [
+                // 		{
+                // 			discardComments: { removeAll: true },
+                // 		},
+                // 	],
+                // },
+            }),
         ],
         moduleIds: "named",
         providedExports: true,
         removeAvailableModules: true,
         removeEmptyChunks: true,
-        sideEffects: false, // reduces the performance of webpack
+        sideEffects: true, // reduces the performance of webpack
 
         splitChunks: {
             chunks: "all", // 'async',
@@ -162,6 +174,46 @@ const config = {
         new HtmlWebpackPlugin({
             template: "index.html",
         }),
+        new MiniCssExtractPlugin({
+            filename: "Leaflet.css", // output CSS file name
+            // filename: '[name].css',
+            // chunkFilename: '[id].css',
+            // filename: '[name].css',
+            // chunkFilename: '[id].css',
+            // insert: 'head',
+            // filename: 'Styles.css',
+            // ignoreOrder: true,
+        }),
+        new PurgeCSSPlugin({
+            // paths: glob.sync([`${PATHS.root}/**/*`, `${PATHS.dist}/**/*`], { nodir: true }),
+            paths: glob.sync([`./**/*`], { nodir: true }),
+            blocklist: [
+                // /^\.is-XXX/,
+                // /^\.js-XXX/,
+                // /article/,
+                /leaflet-control-layers/,
+                /leaflet-control-scale/,
+                /leaflet-default-icon-path/,
+                /leaflet-marker-draggable/,
+                /leaflet-marker-icon/,
+                /leaflet-popup/,
+                /leaflet-tooltip/,
+                /leaflet-zoom-box/,
+                // /input\[type="radio"\]/, // may not be working
+                // /notice/,
+                // /radio/,
+                // /[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]*\.js/,
+            ],
+            safelist: [
+                "leaflet-control-zoom-in",
+                "leaflet-control-zoom-out",
+                "leaflet-top",
+                "leaflet-right",
+                "leaflet-bottom",
+                "leaflet-left",
+            ],
+            fontFace: true,
+        }),
         new CompressionPlugin({
             algorithm: "brotliCompress",
             compressionOptions: {
@@ -187,6 +239,9 @@ const config = {
     ],
 
     module: {
+        defaultRules: [
+            "...", // you can use "..." to reference those rules applied by webpack by default
+        ],
         rules: [
             // {
             //     test: /\.(js|jsx)$/i,
@@ -258,6 +313,7 @@ const config = {
     devServer: {
         open: true,
         host: "localhost",
+        hot: true,
     },
 };
 
@@ -265,7 +321,7 @@ module.exports = () => {
     if (isProduction) {
         config.mode = "production";
 
-        config.plugins.push(new MiniCssExtractPlugin());
+        // config.plugins.push(new MiniCssExtractPlugin());
 
         // config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
     } else {

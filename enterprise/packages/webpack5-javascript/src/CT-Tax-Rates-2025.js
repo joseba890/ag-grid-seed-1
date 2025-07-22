@@ -10,7 +10,7 @@
 // import * as groupedLayers from "leaflet-groupedlayercontrol";
 
 // @ts-ignore
-import {
+import L, {
     Browser,
     Control,
     DomEvent,
@@ -20,7 +20,7 @@ import {
     // LatLngBounds,
     Map,
     TileLayer,
-    // VideoOverlay,
+    VideoOverlay,
     // Draggable,
 } from "../node_modules/leaflet/src/Leaflet.js";
 
@@ -29,7 +29,22 @@ import "leaflet/src/leaflet.css";
 
 import municipalitiesCT from "../src/CT-Tax-Rates-2025.json";
 
+import { cube } from "../src/math.js";
+
 let jpsModule = (function () {
+    function component() {
+        const element = document.createElement("pre");
+
+        element.innerHTML = [
+            "Hello webpack!",
+            "5 cubed is equal to " + cube(5),
+        ].join("\n\n");
+
+        // return element;
+    }
+
+    // document.body.appendChild(component());
+
     // debugger;
     const municipalities = municipalitiesCT;
 
@@ -356,10 +371,11 @@ let jpsModule = (function () {
     function addZoomControl() {
         new Control.Zoom({
             position: "topright",
+            zoomInTitle: "Zoom in !!!",
         }).addTo(map);
     }
 
-    async function addTileLayers() {
+    function addTileLayers() {
         const styleUrl =
             "https://{s}.basemaps.cartocdn.com/{variant}/{z}/{x}/{y}{r}.png";
         const attribution =
@@ -372,7 +388,7 @@ let jpsModule = (function () {
             variant: "light_nolabels",
         }).addTo(map);
 
-        await yieldMain();
+        // await yieldMain();
 
         //  add map labels as a separate layer
         map.createPane("labels");
@@ -394,10 +410,8 @@ let jpsModule = (function () {
             createMap,
             addTileLayers,
             fitBounds,
-
             addLegend,
             addZoomControl,
-
             addInfoDiv,
         ];
 
